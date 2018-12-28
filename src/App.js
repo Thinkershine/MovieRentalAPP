@@ -7,8 +7,6 @@ class App extends Component {
   render() {
     return (
       <main className="container">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1>This Module Is Hot</h1>
         <Movies />
       </main>
     );
