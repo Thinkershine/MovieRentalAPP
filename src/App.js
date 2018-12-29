@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import Movies from "./components/movies";
 import Counters from "./components/counters";
@@ -67,7 +66,7 @@ class App extends Component {
             onIncrement={this.handleIncrement}
             onDecrement={this.handleDecrement}
           />
-          <Movies />
+          <Movies iLikeIt="false" />
         </main>
       </React.Fragment>
     );
