@@ -27,7 +27,7 @@ class Movies extends Component {
           <td>{movie.genre.name}</td>
           <td>{movie.numberInStock}</td>
           <td>{movie.dailyRentalRate}</td>
-          {/* Delete Movie */}
+
           <td>
             <button
               onClick={() => this.handleDelete(movie)}
@@ -44,9 +44,9 @@ class Movies extends Component {
   };
 
   handleDelete = movie => {
-    const indexOfMovieToRemove = this.state.movies.lastIndexOf(movie);
-    const allMovies = this.state.movies;
-    allMovies.splice(indexOfMovieToRemove, 1);
+    const { movies } = this.state;
+    const allMovies = movies;
+    allMovies.splice(movies.lastIndexOf(movie), 1);
 
     this.updateMessage();
 
@@ -56,10 +56,11 @@ class Movies extends Component {
   };
 
   updateMessage = () => {
-    if (this.state.movies.length > 0) {
+    const { length: count } = this.state.movies;
+
+    if (count > 0) {
       this.setState({
-        message:
-          "Showing " + this.state.movies.length + " movies in the database."
+        message: "Showing " + count + " movies in the database."
       });
     } else {
       this.setState({
@@ -69,10 +70,15 @@ class Movies extends Component {
   };
 
   render() {
-    return (
-      <React.Fragment>
-        <h3>{this.state.message}</h3>
-        {this.state.movies.length !== 0 && (
+    const { length: count } = this.state.movies;
+
+    if (count === 0) {
+      return <h3>There Aren't Any Movies in the Database.</h3>;
+    } else {
+      return (
+        <React.Fragment>
+          <h3>{"Showing " + count + "movies in the database."}</h3>
+
           <table className="table">
             <thead>
               <tr>
@@ -86,9 +92,9 @@ class Movies extends Component {
             </thead>
             <tbody>{this.renderMovies()}</tbody>
           </table>
-        )}
-      </React.Fragment>
-    );
+        </React.Fragment>
+      );
+    }
   }
 }
 
