@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { getMovies } from "../services/fakeMovieService.js";
-import LikeIt from "./likeIt";
 import Like from "./common/like";
 import Pagination from "./common/pagination";
 
@@ -9,7 +8,7 @@ class Movies extends Component {
     super(props);
     this.state.movies = getMovies();
     this.state.currentPage = 1;
-    this.state.itemsToDisplayPerPage = 5;
+    this.state.itemsToDisplayPerPage = 1;
     this.state.noOfPages = Math.ceil(
       this.state.movies.length / this.state.itemsToDisplayPerPage
     );
@@ -70,7 +69,10 @@ class Movies extends Component {
     this.updateMessage();
 
     this.setState({
-      movies: allMovies
+      movies: allMovies,
+      noOfPages: Math.ceil(
+        this.state.movies.length / this.state.itemsToDisplayPerPage
+      )
     });
   };
 
@@ -84,6 +86,20 @@ class Movies extends Component {
     } else {
       this.setState({
         message: "There Aren't Any Movies in the Database."
+      });
+    }
+  };
+
+  handlePagination = pageClicked => {
+    console.log("PageClicked", pageClicked);
+
+    if (pageClicked === 0) {
+      return;
+    }
+
+    if (pageClicked <= this.state.noOfPages && pageClicked !== 0) {
+      this.setState({
+        currentPage: pageClicked
       });
     }
   };
@@ -116,6 +132,8 @@ class Movies extends Component {
           <Pagination
             noOfPages={this.state.noOfPages}
             currentPage={this.state.currentPage}
+            onClick={this.handlePagination}
+            /* Handle Current Page ?? */
           />
         </React.Fragment>
       );

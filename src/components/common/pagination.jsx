@@ -4,24 +4,23 @@ class Pagination extends Component {
   state = {};
 
   renderPaginationButtons = () => {
-    console.log("No of Pages", this.state.noOfPages);
+    const { currentPage, noOfPages } = this.props;
 
     let pages = [];
 
-    for (let i = 1; i < this.props.noOfPages + 1; i += 1) {
+    for (let i = 1; i < noOfPages + 1; i += 1) {
       pages.push(
         <li
-          className={
-            this.props.currentPage === i ? "page-item active" : "page-item"
-          }
+          key={i}
+          className={currentPage === i ? "page-item active" : "page-item"}
         >
-          <a href="#" className="page-link">
+          <i className="page-link" onClick={() => this.props.onClick(i)}>
             {i}
-          </a>
+          </i>
         </li>
       );
     }
-    console.log("pages", pages);
+
     return pages;
   };
 
@@ -31,25 +30,29 @@ class Pagination extends Component {
         <ul className="pagination">
           {/* Previous Button */}
           <li className="page-item">
-            <a
-              href="#"
+            <i
               className="page-link disabled"
               tabIndex="-1"
               aria-label="Previous"
+              onClick={() => this.props.onClick(this.props.currentPage - 1)}
             >
               <span aria-hidden="true">&laquo;</span>
               <span className="sr-only">Previous</span>
-            </a>
+            </i>
           </li>
 
           {this.renderPaginationButtons()}
 
           {/* Next Button */}
           <li className="page-item">
-            <a href="#" className="page-link" aria-label="Next">
+            <i
+              className="page-link"
+              aria-label="Next"
+              onClick={() => this.props.onClick(this.props.currentPage + 1)}
+            >
               <span aria-hidden="true">&raquo;</span>
-              <span class="sr-only">Next</span>
-            </a>
+              <span className="sr-only">Next</span>
+            </i>
           </li>
         </ul>
       </nav>
