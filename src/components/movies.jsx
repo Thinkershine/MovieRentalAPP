@@ -10,6 +10,7 @@ class Movies extends Component {
   constructor(props) {
     super(props);
     this.state.genres = getGenres();
+    this.state.activeGenre = "all-genres";
     this.state.movies = getMovies();
     this.state.currentPage = 1;
     this.state.itemsToDisplayPerPage = this.props.moviesPerPage;
@@ -137,7 +138,11 @@ class Movies extends Component {
       <div className="container-fluid">
         <div className="row">
           <div className="col-sm" style={{ width: 150 }}>
-            <FilteringMenu title="Genres" items={this.state.genres} />
+            <FilteringMenu
+              title="Genres"
+              items={this.state.genres}
+              activeItem={this.state.activeGenre}
+            />
           </div>
           <div className="col-sm">
             <h3>{"Showing " + count + "movies in the database."}</h3>
