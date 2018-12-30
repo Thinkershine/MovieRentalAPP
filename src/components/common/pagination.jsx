@@ -31,8 +31,12 @@ class Pagination extends Component {
           {/* Previous Button */}
           <li className="page-item">
             <i
-              className="page-link disabled"
-              tabIndex="-1"
+              className={
+                this.props.currentPage === 1
+                  ? "page-link disabled"
+                  : "page-link"
+              }
+              tabIndex={this.props.currentPage === 1 ? "-1" : ""}
               aria-label="Previous"
               onClick={() => this.props.onClick(this.props.currentPage - 1)}
             >
@@ -46,7 +50,11 @@ class Pagination extends Component {
           {/* Next Button */}
           <li className="page-item">
             <i
-              className="page-link"
+              className={
+                this.props.currentPage === this.props.noOfPages
+                  ? "page-link disabled"
+                  : "page-link"
+              }
               aria-label="Next"
               onClick={() => this.props.onClick(this.props.currentPage + 1)}
             >

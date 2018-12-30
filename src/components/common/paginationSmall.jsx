@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
-const Pagination = () => {
+const PaginationSmall = () => {
   return null;
 };
 
-export default Pagination;
+export default PaginationSmall;

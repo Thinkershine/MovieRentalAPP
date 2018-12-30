@@ -24,7 +24,22 @@ class Movies extends Component {
   renderMovies = () => {
     let moviesCounter = 0;
 
-    const movies = this.state.movies.map(movie => {
+    let fromIndex = 0;
+    if (this.state.currentPage === 1) {
+      fromIndex = 0;
+    } else {
+      fromIndex =
+        (this.state.currentPage - 1) * this.state.itemsToDisplayPerPage;
+    }
+    console.log("From index", fromIndex);
+
+    const filterMoviesWithPagination = this.state.movies.slice(
+      fromIndex,
+      fromIndex + this.state.itemsToDisplayPerPage
+    );
+    console.log("PaginatedMovies", filterMoviesWithPagination);
+
+    const movies = filterMoviesWithPagination.map(movie => {
       moviesCounter += 1;
 
       return (
