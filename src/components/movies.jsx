@@ -2,11 +2,17 @@ import React, { Component } from "react";
 import { getMovies } from "../services/fakeMovieService.js";
 import LikeIt from "./likeIt";
 import Like from "./common/like";
+import Pagination from "./common/pagination";
 
 class Movies extends Component {
   constructor(props) {
     super(props);
     this.state.movies = getMovies();
+    this.state.currentPage = 1;
+    this.state.itemsToDisplayPerPage = 5;
+    this.state.noOfPages = Math.ceil(
+      this.state.movies.length / this.state.itemsToDisplayPerPage
+    );
     this.state.message =
       "Showing " + this.state.movies.length + " movies in the database.";
   }
@@ -106,6 +112,11 @@ class Movies extends Component {
             </thead>
             <tbody>{this.renderMovies()}</tbody>
           </table>
+
+          <Pagination
+            noOfPages={this.state.noOfPages}
+            currentPage={this.state.currentPage}
+          />
         </React.Fragment>
       );
     }
