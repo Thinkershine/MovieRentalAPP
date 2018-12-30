@@ -1,12 +1,15 @@
 import React, { Component } from "react";
 import { getMovies } from "../services/fakeMovieService.js";
+import { getGenres } from "../services/fakeGenreService.js";
 import Like from "./common/like";
 import Pagination from "./common/pagination";
 import { paginate } from "../utils/paginate";
+import FilteringMenu from "../components/common/filteringMenu";
 
 class Movies extends Component {
   constructor(props) {
     super(props);
+    this.state.genres = getGenres();
     this.state.movies = getMovies();
     this.state.currentPage = 1;
     this.state.itemsToDisplayPerPage = this.props.moviesPerPage;
@@ -15,6 +18,7 @@ class Movies extends Component {
     );
     this.state.message =
       "Showing " + this.state.movies.length + " movies in the database.";
+    console.log("Genres", this.state.genres);
   }
 
   state = {
@@ -130,31 +134,37 @@ class Movies extends Component {
     //  const movies = paginate(allMovies, currentPage, pageSize);
 
     return (
-      <React.Fragment>
-        <h3>{"Showing " + count + "movies in the database."}</h3>
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col-sm" style={{ width: 150 }}>
+            <FilteringMenu title="Genres" items={this.state.genres} />
+          </div>
+          <div className="col-sm">
+            <h3>{"Showing " + count + "movies in the database."}</h3>
+            <table className="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Genre</th>
+                  <th scope="col">Stock</th>
+                  <th scope="col">Rate</th>
+                  <th scrop="col">Like</th>
+                  <th />
+                </tr>
+              </thead>
+              <tbody>{this.renderMovies()}</tbody>
+            </table>
 
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Title</th>
-              <th scope="col">Genre</th>
-              <th scope="col">Stock</th>
-              <th scope="col">Rate</th>
-              <th scrop="col">Like</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>{this.renderMovies()}</tbody>
-        </table>
-
-        <Pagination
-          noOfPages={this.state.noOfPages}
-          currentPage={this.state.currentPage}
-          onClick={this.handlePagination}
-          /* Handle Current Page ?? */
-        />
-      </React.Fragment>
+            <Pagination
+              noOfPages={this.state.noOfPages}
+              currentPage={this.state.currentPage}
+              onClick={this.handlePagination}
+              /* Handle Current Page ?? */
+            />
+          </div>
+        </div>
+      </div>
     );
   }
 }

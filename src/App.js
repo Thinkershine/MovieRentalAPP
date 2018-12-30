@@ -59,13 +59,15 @@ class App extends Component {
           </header>
         </div>
         <main className="container">
-          <Counters
-            counters={counters}
-            onReset={this.handleReset}
-            onDelete={this.handleDelete}
-            onIncrement={this.handleIncrement}
-            onDecrement={this.handleDecrement}
-          />
+          <div className="row">
+            <Counters
+              counters={counters}
+              onReset={this.handleReset}
+              onDelete={this.handleDelete}
+              onIncrement={this.handleIncrement}
+              onDecrement={this.handleDecrement}
+            />
+          </div>
           <Movies iLikeIt="false" moviesPerPage="5" />
         </main>
       </React.Fragment>
