@@ -66,7 +66,7 @@ class App extends Component {
             onIncrement={this.handleIncrement}
             onDecrement={this.handleDecrement}
           />
-          <Movies iLikeIt="false" />
+          <Movies iLikeIt="false" moviesPerPage="5" />
         </main>
       </React.Fragment>
     );

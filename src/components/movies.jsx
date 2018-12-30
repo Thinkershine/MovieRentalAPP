@@ -2,13 +2,14 @@ import React, { Component } from "react";
 import { getMovies } from "../services/fakeMovieService.js";
 import Like from "./common/like";
 import Pagination from "./common/pagination";
+import { paginate } from "../utils/paginate";
 
 class Movies extends Component {
   constructor(props) {
     super(props);
     this.state.movies = getMovies();
     this.state.currentPage = 1;
-    this.state.itemsToDisplayPerPage = 1;
+    this.state.itemsToDisplayPerPage = this.props.moviesPerPage;
     this.state.noOfPages = Math.ceil(
       this.state.movies.length / this.state.itemsToDisplayPerPage
     );
@@ -121,38 +122,40 @@ class Movies extends Component {
 
   render() {
     const { length: count } = this.state.movies;
+    const { pageSize, currentPage, movies: allMovies } = this.state;
 
-    if (count === 0) {
-      return <h3>There Aren't Any Movies in the Database.</h3>;
-    } else {
-      return (
-        <React.Fragment>
-          <h3>{"Showing " + count + "movies in the database."}</h3>
+    if (count === 0) return <h3>There Aren't Any Movies in the Database.</h3>;
 
-          <table className="table">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Title</th>
-                <th scope="col">Genre</th>
-                <th scope="col">Stock</th>
-                <th scope="col">Rate</th>
-                <th scrop="col">Like</th>
-                <th />
-              </tr>
-            </thead>
-            <tbody>{this.renderMovies()}</tbody>
-          </table>
+    // how to use it? Passing Movie?
+    //  const movies = paginate(allMovies, currentPage, pageSize);
 
-          <Pagination
-            noOfPages={this.state.noOfPages}
-            currentPage={this.state.currentPage}
-            onClick={this.handlePagination}
-            /* Handle Current Page ?? */
-          />
-        </React.Fragment>
-      );
-    }
+    return (
+      <React.Fragment>
+        <h3>{"Showing " + count + "movies in the database."}</h3>
+
+        <table className="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Title</th>
+              <th scope="col">Genre</th>
+              <th scope="col">Stock</th>
+              <th scope="col">Rate</th>
+              <th scrop="col">Like</th>
+              <th />
+            </tr>
+          </thead>
+          <tbody>{this.renderMovies()}</tbody>
+        </table>
+
+        <Pagination
+          noOfPages={this.state.noOfPages}
+          currentPage={this.state.currentPage}
+          onClick={this.handlePagination}
+          /* Handle Current Page ?? */
+        />
+      </React.Fragment>
+    );
   }
 }
 
