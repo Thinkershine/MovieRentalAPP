@@ -5,13 +5,15 @@ import Like from "./common/like";
 import Pagination from "./common/pagination";
 import { paginate } from "../utils/paginate";
 import FilteringMenu from "../components/common/filteringMenu";
+import ListGroup from "../components/listGroup";
 
 class Movies extends Component {
   constructor(props) {
     super(props);
-    this.state.genres = getGenres();
+    this.state.genres = [];
     this.state.activeGenre = "all-genres";
-    this.state.movies = getMovies();
+    this.state.movies = [];
+    this.state.filteredMovies = this.state.movies;
     this.state.currentPage = 1;
     this.state.itemsToDisplayPerPage = this.props.moviesPerPage;
     this.state.noOfPages = Math.ceil(
@@ -22,9 +24,101 @@ class Movies extends Component {
     console.log("Genres", this.state.genres);
   }
 
+  componentDidMount() {
+    this.setState({
+      movies: getMovies(),
+      genres: getGenres()
+    });
+  }
+
   state = {
     message: null,
     movies: null
+  };
+
+  handleLike = movie => {
+    const movies = [...this.state.movies];
+    const index = movies.indexOf(movie);
+    movies[index] = { ...movies[index] };
+    movies[index].liked = !movies[index].liked;
+    this.setState({ movies });
+  };
+
+  handleFiltering = genre => {
+    // work on movies
+    const movies = [...this.state.movies];
+    const moviesByGenre = movies.filter(movie => {
+      if (movie.genre.name === genre) {
+        return movie;
+      } else if (genre === "all-genres") {
+        return movie;
+      }
+    });
+
+    const newNoOfPages = Math.ceil(
+      this.state.movies.length / this.state.itemsToDisplayPerPage
+    );
+    // handle currentPage Change if it doesn't anymore
+    let currentPage = this.state.currentPage;
+    if (newNoOfPages !== this.state.noOfPages) {
+      currentPage = 1;
+      console.log("Current Page", currentPage);
+      // or check which should be the last page ?
+    }
+    // handle pagination
+    console.log("New No Of Pages", newNoOfPages);
+    this.setState({
+      activeGenre: genre,
+      filteredMovies: moviesByGenre
+    });
+  };
+
+  handleDelete = movie => {
+    const { movies } = this.state;
+    const allMovies = movies;
+    allMovies.splice(movies.lastIndexOf(movie), 1);
+
+    this.updateMessage();
+
+    this.setState({
+      movies: allMovies,
+      noOfPages: Math.ceil(
+        this.state.movies.length / this.state.itemsToDisplayPerPage
+      )
+    });
+  };
+
+  handlePagination = pageClicked => {
+    const firstPage = 0;
+
+    if (pageClicked === firstPage) {
+      return;
+    }
+
+    if (pageClicked <= this.state.noOfPages && pageClicked !== 0) {
+      this.setState({
+        currentPage: pageClicked
+      });
+    }
+  };
+
+  updateMessage = () => {
+    const { length: count } = this.state.movies;
+
+    if (count > 0 && this.state.activeGenre === "all-genres") {
+      this.setState({
+        message: "Showing " + count + " movies in the database."
+      });
+    } else if (count > 0 && this.state.activeGenre !== "all-genres") {
+      this.setState({
+        message:
+          "Showing " + count + " movies with genre " + this.state.activeGenre
+      });
+    } else {
+      this.setState({
+        message: "There Aren't Any Movies in the Database."
+      });
+    }
   };
 
   renderMovies = () => {
@@ -74,57 +168,6 @@ class Movies extends Component {
     return movies;
   };
 
-  handleLike = movie => {
-    const movies = [...this.state.movies];
-    const index = movies.indexOf(movie);
-    movies[index] = { ...movies[index] };
-    movies[index].liked = !movies[index].liked;
-    this.setState({ movies });
-  };
-
-  handleDelete = movie => {
-    const { movies } = this.state;
-    const allMovies = movies;
-    allMovies.splice(movies.lastIndexOf(movie), 1);
-
-    this.updateMessage();
-
-    this.setState({
-      movies: allMovies,
-      noOfPages: Math.ceil(
-        this.state.movies.length / this.state.itemsToDisplayPerPage
-      )
-    });
-  };
-
-  updateMessage = () => {
-    const { length: count } = this.state.movies;
-
-    if (count > 0) {
-      this.setState({
-        message: "Showing " + count + " movies in the database."
-      });
-    } else {
-      this.setState({
-        message: "There Aren't Any Movies in the Database."
-      });
-    }
-  };
-
-  handlePagination = pageClicked => {
-    console.log("PageClicked", pageClicked);
-
-    if (pageClicked === 0) {
-      return;
-    }
-
-    if (pageClicked <= this.state.noOfPages && pageClicked !== 0) {
-      this.setState({
-        currentPage: pageClicked
-      });
-    }
-  };
-
   render() {
     const { length: count } = this.state.movies;
     const { pageSize, currentPage, movies: allMovies } = this.state;
@@ -137,11 +180,19 @@ class Movies extends Component {
     return (
       <div className="container-fluid">
         <div className="row">
-          <div className="col-sm" style={{ width: 150 }}>
+          <div className="col-3" style={{ width: 150 }}>
             <FilteringMenu
               title="Genres"
               items={this.state.genres}
               activeItem={this.state.activeGenre}
+              onClick={this.handleFiltering}
+            />
+            <ListGroup
+              items={this.state.genres}
+              /* Properties to Make it Reusable */
+              textProperty="name"
+              valueProperty="_id"
+              onSelectItem={this.handleFiltering}
             />
           </div>
           <div className="col-sm">

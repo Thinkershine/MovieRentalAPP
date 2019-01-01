@@ -3,15 +3,15 @@ import PropTypes from "prop-types";
 
 const FilteringMenu = props => {
   const items = props.items.map(item => {
-    console.log("Props Active? ", props.activeItem);
-    console.log("Item Genre ", item.name);
     return (
       <li
+        key={item.name}
         className={
           props.activeItem === item.name
             ? "list-group-item active"
             : "list-group-item"
         }
+        onClick={() => props.onClick(item.name)}
       >
         {item.name}
       </li>
@@ -22,11 +22,13 @@ const FilteringMenu = props => {
       <h2>{props.title}</h2>
       <ul className="list-group">
         <li
+          key="all-genres"
           className={
             props.activeItem === "all-genres"
               ? "list-group-item active"
               : "list-group-item"
           }
+          onClick={() => props.onClick("all-genres")}
         >
           All {props.title}
         </li>
