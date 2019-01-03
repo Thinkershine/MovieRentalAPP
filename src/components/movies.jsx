@@ -7,6 +7,7 @@ import { paginate } from "../utils/paginate";
 import FilteringMenu from "../components/common/filteringMenu";
 import ListGroup from "../components/listGroup";
 import Clock from "../components/common/clock";
+import PaginationSmall from "../components/common/paginationSmall";
 
 class Movies extends Component {
   state = {};
@@ -14,7 +15,7 @@ class Movies extends Component {
   constructor(props) {
     super(props);
     this.state.genres = [];
-    this.state.activeGenre = "all-genres";
+    this.state.activeGenre = "all-genre";
     this.state.movies = [];
     this.state.filteredMovies = this.state.movies;
     this.state.currentPage = 1;
@@ -26,13 +27,11 @@ class Movies extends Component {
   }
 
   componentDidMount() {
-    this.setState({
+    this.setState((state, props) => ({
       movies: getMovies(),
       genres: getGenres(),
-      noOfPages: Math.ceil(
-        getMovies().length / this.state.itemsToDisplayPerPage
-      )
-    });
+      noOfPages: Math.ceil(getMovies().length / state.itemsToDisplayPerPage)
+    }));
   }
 
   handleLike = movie => {
@@ -103,6 +102,10 @@ class Movies extends Component {
     }
   };
 
+  handlePageChange = page => {
+    console.log("PAGE", page);
+  };
+
   updateMessage = () => {
     const { length: count } = this.state.movies;
 
@@ -170,7 +173,7 @@ class Movies extends Component {
   render() {
     const { length: count } = this.state.movies;
     const {
-      pageSize,
+      itemsToDisplayPerPage,
       currentPage,
       activeGenre,
       movies: allMovies
@@ -226,6 +229,13 @@ class Movies extends Component {
               currentPage={this.state.currentPage}
               onClick={this.handlePagination}
               /* Handle Current Page ?? */
+            />
+
+            <PaginationSmall
+              itemsCount={count}
+              pageSize={itemsToDisplayPerPage}
+              currentPage={currentPage}
+              onPageChange={this.handlePageChange}
             />
 
             <Clock />
