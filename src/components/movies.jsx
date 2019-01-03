@@ -22,6 +22,8 @@ class Movies extends Component {
     this.state.noOfPages = 0;
     this.state.itemsToDisplayPerPage = this.props.moviesPerPage;
 
+    this.state.allMoviesBackup = [];
+
     this.state.message =
       "Showing " + this.state.movies.length + " movies in the database.";
   }
@@ -30,6 +32,7 @@ class Movies extends Component {
     this.setState((state, props) => ({
       movies: getMovies(),
       genres: getGenres(),
+      allMoviesBackup: getMovies(),
       noOfPages: Math.ceil(getMovies().length / state.itemsToDisplayPerPage)
     }));
   }
@@ -43,17 +46,18 @@ class Movies extends Component {
   };
 
   handleFiltering = genre => {
-    // Using Filtering Menu
+    let movies = [];
+    console.log("All Movies Backup Length", this.state.allMoviesBackup.length);
+    if (this.state.allMoviesBackup.length > 0) {
+      movies = [...this.state.allMoviesBackup];
+    } else {
+      movies = [...this.state.movies];
+    }
 
-    // Using List Group
-
-    console.log("SELECTED GENRE ", genre.name);
-    // work on movies
-    const movies = [...this.state.movies];
     const moviesByGenre = movies.filter(movie => {
       if (movie.genre.name === genre.name) {
         return movie;
-      } else if (genre === "all-genres") {
+      } else if (genre.name === "all-genres") {
         return movie;
       }
     });
@@ -61,7 +65,8 @@ class Movies extends Component {
     this.setState({
       activeGenre: genre,
       filteredMovies: moviesByGenre,
-      movies: moviesByGenre
+      movies: moviesByGenre,
+      allMoviesBackup: movies
     });
   };
 
@@ -239,12 +244,11 @@ class Movies extends Component {
               <tbody>{movies}</tbody>
             </table>
 
-            <Pagination
+            {/* <Pagination
               noOfPages={this.state.noOfPages}
               currentPage={this.state.currentPage}
               onClick={this.handlePagination}
-              /* Handle Current Page ?? */
-            />
+            /> */}
 
             <PaginationSmall
               itemsCount={count}
