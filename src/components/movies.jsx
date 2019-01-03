@@ -47,29 +47,21 @@ class Movies extends Component {
 
     // Using List Group
 
+    console.log("SELECTED GENRE ", genre.name);
     // work on movies
     const movies = [...this.state.movies];
     const moviesByGenre = movies.filter(movie => {
-      if (movie.genre.name === genre) {
+      if (movie.genre.name === genre.name) {
         return movie;
       } else if (genre === "all-genres") {
         return movie;
       }
     });
 
-    const newNoOfPages = Math.ceil(
-      this.state.movies.length / this.state.itemsToDisplayPerPage
-    );
-    // handle currentPage Change if it doesn't anymore
-    let currentPage = this.state.currentPage;
-    if (newNoOfPages !== this.state.noOfPages) {
-      currentPage = 1;
-      // or check which should be the last page ?
-    }
-    // handle pagination
     this.setState({
       activeGenre: genre,
-      filteredMovies: moviesByGenre
+      filteredMovies: moviesByGenre,
+      movies: moviesByGenre
     });
   };
 
@@ -103,7 +95,7 @@ class Movies extends Component {
   };
 
   handlePageChange = page => {
-    console.log("PAGE", page);
+    this.setState({ currentPage: page });
   };
 
   updateMessage = () => {
@@ -126,22 +118,20 @@ class Movies extends Component {
   };
 
   renderMovies = () => {
+    const {
+      currentPage,
+      itemsToDisplayPerPage,
+      movies: allMovies
+    } = this.state;
     let moviesCounter = 0;
 
-    let fromIndex = 0;
-    if (this.state.currentPage === 1) {
-      fromIndex = 0;
-    } else {
-      fromIndex =
-        (this.state.currentPage - 1) * this.state.itemsToDisplayPerPage;
-    }
-
-    const filterMoviesWithPagination = this.state.movies.slice(
-      fromIndex,
-      fromIndex + this.state.itemsToDisplayPerPage
+    const paginatedMovies = paginate(
+      allMovies,
+      currentPage,
+      itemsToDisplayPerPage
     );
 
-    const movies = filterMoviesWithPagination.map(movie => {
+    const movies = paginatedMovies.map(movie => {
       moviesCounter += 1;
 
       return (
@@ -172,14 +162,15 @@ class Movies extends Component {
 
   render() {
     const { length: count } = this.state.movies;
+    if (count === 0) return <h3>There Aren't Any Movies in the Database.</h3>;
+
     const {
       itemsToDisplayPerPage,
       currentPage,
       activeGenre,
       movies: allMovies
     } = this.state;
-
-    if (count === 0) return <h3>There Aren't Any Movies in the Database.</h3>;
+    let moviesCounter = 0;
 
     // Filter movies
     const filtered = activeGenre
@@ -189,18 +180,42 @@ class Movies extends Component {
     console.log("FILTERED", filtered);
     // how to use it? Passing Movie?
     //  const movies = paginate(allMovies, currentPage, pageSize);
+    const paginatedMovies = paginate(
+      allMovies,
+      currentPage,
+      itemsToDisplayPerPage
+    );
+
+    const movies = paginatedMovies.map(movie => {
+      moviesCounter += 1;
+
+      return (
+        <tr key={movie._id}>
+          <th scope="row">{moviesCounter}</th>
+          <td>{movie.title}</td>
+          <td>{movie.genre.name}</td>
+          <td>{movie.numberInStock}</td>
+          <td>{movie.dailyRentalRate}</td>
+          <td>
+            {/* <LikeIt iLikeIt={this.props.iLikeIt} /> */}
+            <Like liked={movie.liked} onClick={() => this.handleLike(movie)} />
+          </td>
+          <td>
+            <button
+              onClick={() => this.handleDelete(movie)}
+              className="btn btn-danger btn-sm"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      );
+    });
 
     return (
       <div className="container-fluid">
         <div className="row">
           <div className="col-3" style={{ width: 150 }}>
-            {/* Filtering Menu - My Way */}
-            <FilteringMenu
-              title="Genres"
-              items={this.state.genres}
-              activeItem={this.state.activeGenre}
-              onClick={this.handleFiltering}
-            />
             <ListGroup
               items={this.state.genres}
               selectedItem={this.state.activeGenre}
@@ -221,7 +236,7 @@ class Movies extends Component {
                   <th />
                 </tr>
               </thead>
-              <tbody>{this.renderMovies()}</tbody>
+              <tbody>{movies}</tbody>
             </table>
 
             <Pagination
