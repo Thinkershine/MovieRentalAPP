@@ -6,8 +6,11 @@ import Pagination from "./common/pagination";
 import { paginate } from "../utils/paginate";
 import FilteringMenu from "../components/common/filteringMenu";
 import ListGroup from "../components/listGroup";
+import Clock from "../components/common/clock";
 
 class Movies extends Component {
+  state = {};
+
   constructor(props) {
     super(props);
     this.state.genres = [];
@@ -15,26 +18,22 @@ class Movies extends Component {
     this.state.movies = [];
     this.state.filteredMovies = this.state.movies;
     this.state.currentPage = 1;
+    this.state.noOfPages = 0;
     this.state.itemsToDisplayPerPage = this.props.moviesPerPage;
-    this.state.noOfPages = Math.ceil(
-      this.state.movies.length / this.state.itemsToDisplayPerPage
-    );
+
     this.state.message =
       "Showing " + this.state.movies.length + " movies in the database.";
-    console.log("Genres", this.state.genres);
   }
 
   componentDidMount() {
     this.setState({
       movies: getMovies(),
-      genres: getGenres()
+      genres: getGenres(),
+      noOfPages: Math.ceil(
+        getMovies().length / this.state.itemsToDisplayPerPage
+      )
     });
   }
-
-  state = {
-    message: null,
-    movies: null
-  };
 
   handleLike = movie => {
     const movies = [...this.state.movies];
@@ -45,6 +44,10 @@ class Movies extends Component {
   };
 
   handleFiltering = genre => {
+    // Using Filtering Menu
+
+    // Using List Group
+
     // work on movies
     const movies = [...this.state.movies];
     const moviesByGenre = movies.filter(movie => {
@@ -62,11 +65,9 @@ class Movies extends Component {
     let currentPage = this.state.currentPage;
     if (newNoOfPages !== this.state.noOfPages) {
       currentPage = 1;
-      console.log("Current Page", currentPage);
       // or check which should be the last page ?
     }
     // handle pagination
-    console.log("New No Of Pages", newNoOfPages);
     this.setState({
       activeGenre: genre,
       filteredMovies: moviesByGenre
@@ -131,13 +132,11 @@ class Movies extends Component {
       fromIndex =
         (this.state.currentPage - 1) * this.state.itemsToDisplayPerPage;
     }
-    console.log("From index", fromIndex);
 
     const filterMoviesWithPagination = this.state.movies.slice(
       fromIndex,
       fromIndex + this.state.itemsToDisplayPerPage
     );
-    console.log("PaginatedMovies", filterMoviesWithPagination);
 
     const movies = filterMoviesWithPagination.map(movie => {
       moviesCounter += 1;
@@ -170,10 +169,21 @@ class Movies extends Component {
 
   render() {
     const { length: count } = this.state.movies;
-    const { pageSize, currentPage, movies: allMovies } = this.state;
+    const {
+      pageSize,
+      currentPage,
+      activeGenre,
+      movies: allMovies
+    } = this.state;
 
     if (count === 0) return <h3>There Aren't Any Movies in the Database.</h3>;
 
+    // Filter movies
+    const filtered = activeGenre
+      ? allMovies.filter(m => m.genre._id === activeGenre._id)
+      : allMovies;
+
+    console.log("FILTERED", filtered);
     // how to use it? Passing Movie?
     //  const movies = paginate(allMovies, currentPage, pageSize);
 
@@ -181,6 +191,7 @@ class Movies extends Component {
       <div className="container-fluid">
         <div className="row">
           <div className="col-3" style={{ width: 150 }}>
+            {/* Filtering Menu - My Way */}
             <FilteringMenu
               title="Genres"
               items={this.state.genres}
@@ -189,10 +200,8 @@ class Movies extends Component {
             />
             <ListGroup
               items={this.state.genres}
-              /* Properties to Make it Reusable */
-              textProperty="name"
-              valueProperty="_id"
-              onSelectItem={this.handleFiltering}
+              selectedItem={this.state.activeGenre}
+              onItemSelect={this.handleFiltering}
             />
           </div>
           <div className="col-sm">
@@ -218,6 +227,8 @@ class Movies extends Component {
               onClick={this.handlePagination}
               /* Handle Current Page ?? */
             />
+
+            <Clock />
           </div>
         </div>
       </div>

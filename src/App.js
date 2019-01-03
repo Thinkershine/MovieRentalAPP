@@ -55,11 +55,11 @@ class App extends Component {
         <div className="App">
           <header>
             <h1>Welcome to Our Rental Video Site</h1>
-            <NavBar totalCounters={this.state.counters.length} />
+            {/* <NavBar totalCounters={this.state.counters.length} /> */}
           </header>
         </div>
         <main className="container">
-          <div className="row">
+          {/* <div className="row">
             <Counters
               counters={counters}
               onReset={this.handleReset}
@@ -67,7 +67,7 @@ class App extends Component {
               onIncrement={this.handleIncrement}
               onDecrement={this.handleDecrement}
             />
-          </div>
+          </div> */}
           <Movies iLikeIt="false" moviesPerPage="5" />
         </main>
       </React.Fragment>
