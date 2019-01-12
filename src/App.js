@@ -3,6 +3,9 @@ import "./App.css";
 import Movies from "./components/movies";
 import Counters from "./components/counters";
 import NavBar from "./components/navbar";
+import { Switch, Route, Redirect } from "react-router-dom";
+import Customers from "./components/customers";
+import Rentals from "./components/rentals";
 
 class App extends Component {
   state = {
@@ -54,11 +57,27 @@ class App extends Component {
       <React.Fragment>
         <div className="App">
           <header>
+            <NavBar totalCounters={this.state.counters.length} />
             <h1>Welcome to Our Rental Video Site</h1>
-            {/* <NavBar totalCounters={this.state.counters.length} /> */}
           </header>
         </div>
         <main className="container">
+          <Switch>
+            <Route path="/customers" component={Customers} />
+            <Route path="/rentals" component={Rentals} />
+            <Route
+              path="/movies"
+              render={props => (
+                <Movies iLikeIt="false" moviesPerPage="5" {...props} />
+              )}
+            />
+            <Route
+              path="/"
+              render={props => (
+                <Movies iLikeIt="false" moviesPerPage="5" {...props} />
+              )}
+            />
+          </Switch>
           {/* <div className="row">
             <Counters
               counters={counters}
@@ -68,7 +87,6 @@ class App extends Component {
               onDecrement={this.handleDecrement}
             />
           </div> */}
-          <Movies iLikeIt="false" moviesPerPage="5" />
         </main>
       </React.Fragment>
     );

@@ -47,7 +47,6 @@ class Movies extends Component {
 
   handleFiltering = genre => {
     let movies = [];
-    console.log("All Movies Backup Length", this.state.allMoviesBackup.length);
     if (this.state.allMoviesBackup.length > 0) {
       movies = [...this.state.allMoviesBackup];
     } else {
@@ -66,7 +65,8 @@ class Movies extends Component {
       activeGenre: genre,
       filteredMovies: moviesByGenre,
       movies: moviesByGenre,
-      allMoviesBackup: movies
+      allMoviesBackup: movies,
+      currentPage: 1
     });
   };
 

@@ -1,11 +1,22 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 const NavBar = ({ totalCounters }) => {
   return (
-    <nav className="navbar navbar-light bg-light">
-      <a className="navbar-brand btn btn-primary" href="#">
-        NavBar
-      </a>
+    <nav className="nav navbar-light bg-light justify-content-center">
+      <NavLink to="/" className="navbar-brand nav-link btn btn-primary">
+        RentAVideo
+      </NavLink>
+      <NavLink to="/movies" className="nav-link btn btn-primary">
+        Movies
+      </NavLink>
+      <NavLink to="/customers" className="nav-link btn btn-primary">
+        Customers
+      </NavLink>
+      <NavLink to="/rentals" className="nav-link btn btn-primary">
+        Rentals
+      </NavLink>
+
       <h3>
         Total Items:
         <span className="badge badge-pill badge-secondary">
