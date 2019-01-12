@@ -195,7 +195,11 @@ class Movies extends Component {
       moviesCounter += 1;
 
       return (
-        <tr key={movie._id}>
+        <tr
+          key={movie._id}
+          style={{ cursor: "pointer" }}
+          onClick={() => this.props.history.push("/movies/" + movie._id)}
+        >
           <th scope="row">{moviesCounter}</th>
           <td>{movie.title}</td>
           <td>{movie.genre.name}</td>

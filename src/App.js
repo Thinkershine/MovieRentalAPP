@@ -7,6 +7,7 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import Customers from "./components/customers";
 import Rentals from "./components/rentals";
 import NotFound from "./components/notFound";
+import MovieDetails from "./components/movieDetails";
 
 class App extends Component {
   state = {
@@ -66,6 +67,7 @@ class App extends Component {
           <Switch>
             <Route path="/customers" component={Customers} />
             <Route path="/rentals" component={Rentals} />
+            <Route path="/movies/:id" component={MovieDetails} />
             <Route
               path="/movies"
               render={props => (
