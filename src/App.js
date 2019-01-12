@@ -6,6 +6,7 @@ import NavBar from "./components/navbar";
 import { Switch, Route, Redirect } from "react-router-dom";
 import Customers from "./components/customers";
 import Rentals from "./components/rentals";
+import NotFound from "./components/notFound";
 
 class App extends Component {
   state = {
@@ -76,7 +77,11 @@ class App extends Component {
               render={props => (
                 <Movies iLikeIt="false" moviesPerPage="5" {...props} />
               )}
+              exact
             />
+            <Route path="/not-found" component={NotFound} />
+            <Redirect to="/not-found" />
+            <Redirect from="/" to="/movies" />
           </Switch>
           {/* <div className="row">
             <Counters
