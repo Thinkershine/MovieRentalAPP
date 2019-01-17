@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import "./App.css";
 import Movies from "./components/movies";
 import Counters from "./components/counters";
 import NavBar from "./components/navbar";
@@ -8,6 +7,8 @@ import Customers from "./components/customers";
 import Rentals from "./components/rentals";
 import NotFound from "./components/notFound";
 import MovieDetails from "./components/movieDetails";
+import LoginForm from "./components/loginForm";
+import "./App.css";
 
 class App extends Component {
   state = {
@@ -74,6 +75,7 @@ class App extends Component {
                 <Movies iLikeIt="false" moviesPerPage="5" {...props} />
               )}
             />
+            <Route path="/login" component={LoginForm} />
             <Route
               path="/"
               render={props => (
