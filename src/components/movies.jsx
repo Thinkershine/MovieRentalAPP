@@ -2,12 +2,11 @@ import React, { Component } from "react";
 import { getMovies } from "../services/fakeMovieService.js";
 import { getGenres } from "../services/fakeGenreService.js";
 import Like from "./common/like";
-import Pagination from "./common/pagination";
 import { paginate } from "../utils/paginate";
-import FilteringMenu from "../components/common/filteringMenu";
 import ListGroup from "../components/listGroup";
 import Clock from "../components/common/clock";
 import PaginationSmall from "../components/common/paginationSmall";
+import { Link } from "react-router-dom";
 
 class Movies extends Component {
   state = {};
@@ -262,6 +261,9 @@ class Movies extends Component {
             />
 
             <Clock />
+            <Link to="/movies/add" className="btn btn-primary">
+              Add Movie
+            </Link>
           </div>
         </div>
       </div>

@@ -6,9 +6,11 @@ import { Switch, Route, Redirect } from "react-router-dom";
 import Customers from "./components/customers";
 import Rentals from "./components/rentals";
 import NotFound from "./components/notFound";
+import AddMovieForm from "./components/addMovieForm";
 import MovieDetails from "./components/movieDetails";
 import LoginForm from "./components/loginForm";
 import RegisterForm from "./components/registerForm";
+import { saveMovie } from "./services/fakeMovieService";
 import "./App.css";
 
 class App extends Component {
@@ -54,6 +56,15 @@ class App extends Component {
     }
   };
 
+  handleNewMovie = movie => {
+    const newMovie = {};
+    newMovie.dailyRentalRate = 10;
+    newMovie.genre = movie.genre;
+    newMovie.title = movie.title;
+    newMovie.numberInStock = movie.numberInStock;
+    saveMovie(newMovie);
+  };
+
   render() {
     const { counters } = this.state;
 
@@ -69,6 +80,12 @@ class App extends Component {
           <Switch>
             <Route path="/customers" component={Customers} />
             <Route path="/rentals" component={Rentals} />
+            <Route
+              path="/movies/add"
+              render={props => (
+                <AddMovieForm addNewMovie={this.handleNewMovie} {...props} />
+              )}
+            />
             <Route path="/movies/:id" component={MovieDetails} />
             <Route
               path="/movies"
