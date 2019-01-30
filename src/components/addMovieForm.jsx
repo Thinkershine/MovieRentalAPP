@@ -7,7 +7,7 @@ class AddMovieForm extends Form {
   state = {
     data: { title: "", genre: "", numberInStock: "", rate: "" },
     errors: "",
-    genres: getGenres()
+    genres: []
   };
 
   schema = {
@@ -22,7 +22,7 @@ class AddMovieForm extends Form {
     numberInStock: Joi.number()
       .integer()
       .min(1)
-      .max(30)
+      .max(100)
       .label("In Stock"),
     rate: Joi.number()
       .min(1)

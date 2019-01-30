@@ -90,9 +90,9 @@ export function saveMovie(movie) {
   movieInDb.genre = genresAPI.genres.find(g => g._id === movie.genre);
   movieInDb.numberInStock = movie.numberInStock;
   movieInDb.dailyRentalRate = movie.dailyRentalRate;
-
+  console.log("movie saved", movie);
   if (!movieInDb._id) {
-    movieInDb._id = Date.now();
+    movieInDb._id = Date.now().toString();
     movies.push(movieInDb);
   }
 

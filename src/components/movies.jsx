@@ -175,7 +175,8 @@ class Movies extends Component {
       movies: allMovies
     } = this.state;
     let moviesCounter = 0;
-
+    console.log("activeGenre", activeGenre);
+    console.log("ALL MOVIES", allMovies);
     // Filter movies
     const filtered = activeGenre
       ? allMovies.filter(m => m.genre._id === activeGenre._id)
